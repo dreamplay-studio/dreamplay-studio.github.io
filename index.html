@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamPlay Studio | Official</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="https://cdn.phototourl.com/free/2026-07-09-a4f84d62-624e-43aa-adbe-3608fe3f2ff3.jpg">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --black: #050505;
+            --border: rgba(212, 175, 55, 0.2);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--black); color: white; overflow-x: hidden; line-height: 1.6; }
+
+        /* --- BACKGROUND FX --- */
+        .spotlight { position: fixed; inset: 0; background: radial-gradient(circle at var(--x) var(--y), rgba(212, 175, 55, 0.08) 0%, transparent 50%); z-index: -1; pointer-events: none; }
+        .film-grain { position: fixed; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain.jpg'); opacity: 0.03; pointer-events: none; z-index: 9998; }
+
+        /* --- LOADER & SPLASH --- */
+        #loader { position: fixed; inset: 0; background: black; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s ease; }
+        .loader-logo { font-family: 'Cinzel'; font-size: 3rem; color: var(--gold); letter-spacing: 15px; animation: pulse 2s infinite alternate; text-align: center; }
+        @keyframes pulse { from { opacity: 0.2; } to { opacity: 1; } }
+
+        .splash { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); }
+        .stars { display: flex; gap: 10px; justify-content: center; margin: 15px 0; font-size: 1.5rem; color: #222; cursor: pointer; }
+        .stars .active { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+
+        /* --- NAVIGATION --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .logo { font-family: 'Cinzel'; color: var(--gold); font-weight: 900; letter-spacing: 2px; font-size: 1.1rem; cursor: pointer; }
+        .nav-links { display: flex; gap: 12px; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; cursor: pointer; opacity: 0.7; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+        .panel-toggle { display: flex; background: #111; padding: 4px; border-radius: 50px; border: 1px solid var(--border); }
+        .t-btn { padding: 6px 12px; font-size: 0.5rem; border-radius: 50px; cursor: pointer; color: #555; font-weight: bold; }
+        .t-btn.active { background: var(--gold); color: black; }
+
+        /* --- PAGES --- */
+        .page { display: none; padding: 140px 10% 80px; min-height: 100vh; width: 100%; }
+        .page.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: var(--glass); border: 1px solid var(--border); padding: 2.5rem; backdrop-filter: blur(20px); border-radius: 4px; margin-bottom: 20px; position: relative; }
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px 30px; font-family: 'Cinzel'; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); text-decoration: none; display: inline-block; font-size: 0.7rem; }
+        .btn-gold:hover { background: #fff; box-shadow: 0 0 20px var(--gold); }
+        .btn-red { background: #ff4444; color: white; border: none; padding: 8px 15px; font-size: 0.6rem; font-weight: bold; cursor: pointer; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); }
+
+        /* --- WATERMARK --- */
+        .watermark { position: absolute; bottom: 10px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.4); font-family: 'Cinzel'; pointer-events: none; z-index: 5; letter-spacing: 1px; }
+
+        /* --- BIO LAYOUT --- */
+        .bio-layout { display: grid; grid-template-columns: 350px 1fr; gap: 50px; align-items: center; }
+        .frame { border: 1px solid var(--gold); padding: 12px; background: #000; box-shadow: 0 0 30px rgba(212,175,55,0.2); position: relative; }
+        .frame img { width: 100%; display: block; filter: contrast(1.1); }
+        
+        /* --- GRIDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .art-item { width: 100%; height: 280px; object-fit: cover; border: 1px solid var(--border); transition: 0.4s; }
+
+        /* --- MODAL --- */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 12000; display: none; justify-content: center; align-items: center; padding: 20px; }
+
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 12px; background: #111; color: white; border: 1px solid #333; outline: none; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); opacity: 0.4; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+
+    <div class="film-grain"></div>
+    <div class="spotlight" id="spotlight"></div>
+
+    <div id="loader"><div class="loader-logo">DREAMPLAY</div></div>
+
+    <!-- ENTRY SPLASH -->
+    <div id="entry-splash" class="splash">
+        <div class="glass-card" style="text-align: center; max-width: 450px;">
+            <h2 style="font-size: 1.5rem;">Welcome Visionary</h2>
+            <p style="opacity:0.7; font-size: 0.8rem;">Help us shape the future with a quick rating.</p>
+            <div class="stars" onclick="setSplashRating(event)">
+                <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+            </div>
+            <button class="btn-gold" onclick="closeEntrySplash()">ENTER STUDIO</button>
+        </div>
+    </div>
+
+    <!-- EXIT SPLASH -->
+    <div id="exit-splash" class="splash">
+        <div class="glass-card" style="text-align: center; max-width: 450px;">
+            <h2 style="font-size: 1.5rem;">Final Review</h2>
+            <div class="stars" onclick="setSplashRating(event)">
+                <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+            </div>
+            <textarea id="exit-msg" placeholder="Your thoughts before switching?"></textarea>
+            <button class="btn-gold" onclick="window.submitExitFeedback()">SUBMIT & CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- TRANSITION MODAL -->
+    <div id="archive-modal" class="modal">
+        <div class="glass-card" style="width: 100%; max-width: 500px;">
+            <h2 style="font-size:1.5rem;">Archive Production</h2>
+            <p id="trans-title" style="margin-bottom: 20px; font-weight: bold; color: var(--gold);"></p>
+            <input type="text" id="final-cover" placeholder="Cover Image URL">
+            <input type="text" id="final-video" placeholder="Teaser Video URL (YouTube)">
+            <input type="date" id="final-date" style="color-scheme: dark;">
+            <button class="btn-gold" id="btn-final-publish">PUBLISH TO ARCHIVES</button>
+            <button class="btn-gold" style="background:transparent; color:white; border:1px solid #333;" onclick="closeArchiveModal()">CANCEL</button>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo" onclick="showPage('home')">DREAMPLAY STUDIO</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('about')">About</a>
+            <a onclick="showPage('upcoming')">Upcoming</a>
+            <a onclick="showPage('archives')">Archives</a>
+            <a onclick="showPage('gallery')">Gallery</a>
+            <a onclick="showPage('feedback')">Feedback</a>
+            <a onclick="showPage('contact')">Contact</a>
+            <a onclick="showPage('auth')" id="nav-user-status">Sign In</a>
+        </div>
+        <div class="panel-toggle">
+            <div id="u-t" class="t-btn active" onclick="setMode('user')">USER</div>
+            <div id="a-t" class="t-btn" onclick="triggerExitSplash()">ADMIN</div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HOME -->
+        <section id="home" class="page active">
+            <div style="height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <p style="letter-spacing: 12px; color: var(--gold); margin-bottom: 15px;">EST. JULY 1, 2026</p>
+                <h1 style="font-family: 'Cinzel'; font-size: 5vw; line-height: 1;">LEGENDARY<br>STUDIOS</h1>
+                <button class="btn-gold" style="margin-top: 40px;" onclick="showPage('archives')">THE ARCHIVES</button>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="page">
+            <h2>The Studio</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 40px;">DreamPlay Studio was established on <b>1 July 2026</b>. We merge high-end cinematography with AI and interactive media.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="glass-card" onclick="showPage('founder')" style="cursor:pointer; text-align: center; border-color: var(--gold);">
+                        <img src="https://cdn.phototourl.com/free/2026-07-09-187e4b02-f5c6-4f8f-b2c4-320bd7958e55.jpg" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); margin-bottom:10px;">
+                        <h3>Harshvardhan</h3>
+                        <p style="font-size:0.6rem; color:var(--gold);">FOUNDER</p>
+                    </div>
+                    <div class="glass-card" onclick="showPage('cofounder')" style="cursor:pointer; text-align: center; border-color: var(--gold);">
+                        <div style="width:80px; height:80px; border-radius:50%; background:#111; margin:auto; display:flex; align-items:center; justify-content:center; border:2px solid var(--gold); margin-bottom:10px;">
+                            <i class="fas fa-magic" style="color:var(--gold); font-size:1.5rem;"></i>
+                        </div>
+                        <h3>Arnav Tyagi</h3>
+                        <p style="font-size:0.6rem; color:var(--gold);">CO-FOUNDER</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BIO PAGES -->
+        <section id="founder" class="page">
+            <div class="bio-layout">
+                <div class="frame">
+                    <img src="https://cdn.phototourl.com/free/2026-07-09-187e4b02-f5c6-4f8f-b2c4-320bd7958e55.jpg">
+                    <div class="watermark">© DREAMPLAY STUDIO</div>
+                </div>
+                <div>
+                    <h2>Harshvardhan</h2>
+                    <span class="role-title">DIRECTOR | GAME DEVELOPER | VISIONARY</span>
+                    <p>Harshvardhan is a young filmmaker and game developer passionate about films, animation, AI, and storytelling. His leadership drives DreamPlay Studio to create immersive digital worlds that challenge reality.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cofounder" class="page">
+            <h2>Arnav Tyagi</h2>
+            <span class="role-title">EDITING EXPERT | CREATIVE SUPPORT</span>
+            <div class="glass-card"><p>Arnav Tyagi is the Editing Expert and Creative Support of DreamPlay Studio. Known for his surgical precision and rhythmic style, Arnav ensures every project carries a cinematic soul.</p></div>
+        </section>
+
+        <!-- UPCOMING & ARCHIVES -->
+        <section id="upcoming" class="page"><h2>In Production</h2><div id="u-up-list" class="grid"></div></section>
+        <section id="archives" class="page"><h2>Archives</h2><div id="u-arc-list" class="grid"></div></section>
+        <section id="gallery" class="page"><h2>Concept Gallery</h2><div id="u-art-list" class="art-grid"></div></section>
+
+        <!-- FEEDBACK -->
+        <section id="feedback" class="page">
+            <h2>Feedback</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:40px;">
+                <div class="glass-card">
+                    <div class="stars" onclick="setSplashRating(event)">
+                        <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+                    </div>
+                    <input type="text" id="fb-n" placeholder="Name">
+                    <textarea id="fb-m" placeholder="Message"></textarea>
+                    <button class="btn-gold" style="width:100%" onclick="window.submitManualFB()">PUBLISH</button>
+                </div>
+                <div id="fb-list-main" style="max-height: 500px; overflow-y:auto"></div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="page">
+            <h2>Contact</h2>
+            <div class="glass-card">
+                <p style="color:var(--gold); font-size:1.2rem; margin-bottom:20px;"><i class="fas fa-clock"></i> 9 AM TO 6 PM</p>
+                <p>dreamplaystudio26@gmail.com</p>
+                <p style="margin-bottom:30px;">dreamplaysoffficial01@gmail.com</p>
+                <a href="https://youtube.com/@dreamplaystudio-26" target="_blank" style="color:var(--gold); font-size:1.5rem; margin-right:20px;"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.linkedin.com/in/dreamplay-studio-948126421" target="_blank" style="color:var(--gold); font-size:1.5rem;"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section id="admin" class="page">
+            <h2 style="color:var(--gold)">Director's Desk</h2>
+            <div class="glass-card">
+                <h3>1. New Working Title</h3>
+                <input type="text" id="adm-up-t" placeholder="Project Name">
+                <button class="btn-gold" onclick="window.addUpcoming()">INITIALIZE</button>
+            </div>
+            <div class="glass-card">
+                <h3>2. Transition Workspace</h3>
+                <div id="adm-up-workspace"></div>
+            </div>
+            <div class="glass-card">
+                <h3>3. Post Concept Art</h3>
+                <input type="text" id="adm-art-u" placeholder="Image URL">
+                <button class="btn-gold" onclick="window.addArt()">POST ART</button>
+            </div>
+        </section>
+
+        <!-- AUTH -->
+        <section id="auth" class="page">
+            <div class="glass-card" style="max-width:400px; margin:auto;">
+                <h3 id="auth-title" style="text-align:center; font-family:'Cinzel';">Login</h3>
+                <input type="email" id="email" placeholder="Email">
+                <input type="password" id="pass" placeholder="Password">
+                <button class="btn-gold" style="width:100%" onclick="window.authAction()">CONTINUE</button>
+                <p onclick="window.toggleAuth()" id="auth-toggle-link" style="text-align:center; margin-top:20px; color:var(--gold); cursor:pointer; font-size:0.7rem;">NEW HERE? REGISTER</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>&copy; 2026 DREAMPLAY STUDIO</footer>
+
+    <!-- CORE SCRIPTS -->
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const t = document.getElementById(id); if(t) t.classList.add('active');
+            window.scrollTo(0,0);
+        }
+        function setMode(m) {
+            document.getElementById('u-t').classList.toggle('active', m === 'user');
+            document.getElementById('a-t').classList.toggle('active', m === 'admin');
+            showPage(m === 'admin' ? 'admin' : 'home');
+        }
+        function triggerExitSplash() { document.getElementById('exit-splash').style.display = 'flex'; }
+        function closeEntrySplash() { document.getElementById('entry-splash').style.display = 'none'; }
+        
+        let globalRating = 0;
+        function setSplashRating(e) {
+            if(e.target.tagName !== 'I') return;
+            const val = e.target.dataset.v;
+            globalRating = val;
+            const stars = e.target.parentElement.querySelectorAll('i');
+            stars.forEach((s, i) => s.classList.toggle('active', i < val));
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const spot = document.getElementById('spotlight');
+            spot.style.setProperty('--x', e.clientX + 'px');
+            spot.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        window.onload = () => {
+            document.getElementById('loader').style.display='none';
+            document.getElementById('entry-splash').style.display='flex';
+        };
+    </script>
+
+    <!-- FIREBASE MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAME4ouAQXK1AqxHEP1BYpdXC_FywlS6ZE",
+            authDomain: "dreamplaystudio-e1068.firebaseapp.com",
+            projectId: "dreamplaystudio-e1068",
+            storageBucket: "dreamplaystudio-e1068.firebasestorage.app",
+            messagingSenderId: "1047059448725",
+            appId: "1:1047059448725:web:987e1f3d06e079c625ac9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // TRANSITION LOGIC
+        let pendingId = ""; let pendingTitle = "";
+        window.openArchiveFlow = (id, title) => {
+            pendingId = id; pendingTitle = title;
+            document.getElementById('trans-title').innerText = title;
+            document.getElementById('archive-modal').style.display = 'flex';
+        };
+        window.closeArchiveModal = () => document.getElementById('archive-modal').style.display = 'none';
+
+        document.getElementById('btn-final-publish').onclick = async () => {
+            const c = document.getElementById('final-cover').value;
+            const v = document.getElementById('final-video').value;
+            const d = document.getElementById('final-date').value;
+            if(!c || !d) return alert("Cover and Date required");
+            await addDoc(collection(db, "archives"), { title: pendingTitle, cover: c, video: v, date: d, time: Date.now() });
+            await deleteDoc(doc(db, "upcoming", pendingId));
+            closeArchiveModal();
+            alert("Published!");
+        };
+
+        window.deleteProject = async (id) => { if(confirm("Scrap project?")) await deleteDoc(doc(db, "upcoming", id)); };
+
+        // FEEDBACK
+        window.submitExitFeedback = async () => {
+            const m = document.getElementById('exit-msg').value;
+            await addDoc(collection(db, "feedbacks"), { name: "Exit Feedback", rating: 5, msg: m, time: Date.now() });
+            document.getElementById('exit-splash').style.display = 'none';
+            setMode('admin');
+        };
+
+        window.submitManualFB = async () => {
+            const n = document.getElementById('fb-n').value; const m = document.getElementById('fb-m').value;
+            await addDoc(collection(db, "feedbacks"), { name: n, rating: 5, msg: m, time: Date.now() });
+            alert("Posted!");
+        };
+
+        // LISTENERS
+        onSnapshot(query(collection(db, "archives"), orderBy("time", "desc")), snap => {
+            const l = document.getElementById('u-arc-list'); l.innerHTML = "";
+            const today = new Date().toISOString().split('T')[0];
+            snap.forEach(d => {
+                const p = d.data(); const isRel = p.date <= today;
+                l.innerHTML += `<div class="glass-card" style="padding:0; overflow:hidden"><div style="position:relative"><img src="${p.cover}" style="width:100%; height:180px; object-fit:cover"><div class="watermark">© DREAMPLAY STUDIO</div></div><div style="padding:20px"><span style="border:1px solid var(--gold); color:var(--gold); font-size:0.5rem; padding:2px 5px;">${isRel ? 'RELEASED' : 'UPCOMING'}</span><h3 style="margin-top:10px;">${p.title}</h3><p style="font-size:0.6rem; opacity:0.6">${p.date}</p></div></div>`;
+            });
+        });
+
+        onSnapshot(query(collection(db, "upcoming"), orderBy("time", "desc")), snap => {
+            const ul = document.getElementById('u-up-list'); const al = document.getElementById('adm-up-workspace');
+            ul.innerHTML = ""; al.innerHTML = "";
+            snap.forEach(d => {
+                const p = d.data();
+                ul.innerHTML += `<div class="glass-card"><h3>${p.title}</h3><p style="font-size:0.5rem; color:var(--gold)">IN PRODUCTION</p></div>`;
+                al.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;"><span>${p.title}</span><div><button onclick="window.openArchiveFlow('${d.id}', '${p.title}')">ARCHIVE</button> <button style="color:red" onclick="window.deleteProject('${d.id}')">SCRAP</button></div></div>`;
+            });
+        });
+
+        onSnapshot(query(collection(db, "art"), orderBy("time", "desc")), snap => {
+            const l = document.getElementById('u-art-list'); l.innerHTML = "";
+            snap.forEach(d => { l.innerHTML += `<div style="position:relative"><img src="${d.data().url}" class="art-item"><div class="watermark">© DREAMPLAY STUDIO</div></div>`; });
+        });
+
+        onSnapshot(query(collection(db, "feedbacks"), orderBy("time", "desc")), snap => {
+            const l = document.getElementById('fb-list-main'); l.innerHTML = "";
+            snap.forEach(d => { l.innerHTML += `<div class="glass-card" style="padding:15px"><h4>${d.data().name}</h4><p>${d.data().msg}</p></div>`; });
+        });
+
+        // ADMIN FUNCTIONS
+        window.addUpcoming = async () => { await addDoc(collection(db, "upcoming"), { title: document.getElementById('adm-up-t').value, time: Date.now() }); document.getElementById('adm-up-t').value=""; };
+        window.addArt = async () => { await addDoc(collection(db, "art"), { url: document.getElementById('adm-art-u').value, time: Date.now() }); document.getElementById('adm-art-u').value=""; };
+        
+        let isReg = false;
+        window.toggleAuth = () => { isReg = !isReg; document.getElementById('auth-title').innerText = isReg ? "Register" : "Login"; document.getElementById('auth-toggle-link').innerText = isReg ? "ALREADY A MEMBER? LOGIN" : "NEW HERE? REGISTER"; };
+        window.authAction = async () => {
+            const e = document.getElementById('email').value; const p = document.getElementById('pass').value;
+            try { if(isReg) await createUserWithEmailAndPassword(auth, e, p); else await signInWithEmailAndPassword(auth, e, p); showPage('home'); } catch(err) { alert(err.message); }
+        };
+    </script>
+</body>
+</html>
