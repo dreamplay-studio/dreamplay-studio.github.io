@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamPlay Studio | Official</title>
     
-    <!-- Google Site Verification (UPDATED) -->
-    <meta name="google-site-verification" content="Gr4JaZA7lOu12QqX7K8d-UXa0rLpAB_hJPSMZg11j3c"/>
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="N60wMHqt5IrebMSJQSrkHKdCYNUg57GHwDHss6RieHw" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="https://cdn.phototourl.com/free/2026-07-09-a4f84d62-624e-43aa-adbe-3608fe3f2ff3.jpg">
@@ -32,7 +32,7 @@
         .spotlight { position: fixed; inset: 0; background: radial-gradient(circle at var(--x) var(--y), rgba(212, 175, 55, 0.08) 0%, transparent 50%); z-index: -1; pointer-events: none; }
 
         /* --- LOADER & SPLASH --- */
-        #loader { position: fixed; inset: 0; background: black; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s ease; }
+        #loader { position: fixed; inset: 0; background: black; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s ease; }
         .loader-logo { font-family: 'Cinzel'; font-size: 3rem; color: var(--gold); letter-spacing: 15px; animation: pulse 2s infinite alternate; text-align: center; }
         @keyframes pulse { from { opacity: 0.2; } to { opacity: 1; } }
 
@@ -43,7 +43,7 @@
         /* --- NAVIGATION --- */
         nav { position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
         .logo { font-family: 'Cinzel'; color: var(--gold); font-weight: 900; letter-spacing: 2px; font-size: 1.1rem; cursor: pointer; }
-        .nav-links { display: flex; gap: 12px; }
+        .nav-links { display: flex; gap: 12px; flex-wrap: wrap; }
         .nav-links a { color: white; text-decoration: none; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; cursor: pointer; opacity: 0.7; transition: 0.3s; }
         .nav-links a:hover { opacity: 1; color: var(--gold); }
 
@@ -57,21 +57,26 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .glass-card { background: var(--glass); border: 1px solid var(--border); padding: 2.5rem; backdrop-filter: blur(20px); border-radius: 4px; margin-bottom: 20px; position: relative; }
-        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px 30px; font-family: 'Cinzel'; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); text-decoration: none; display: inline-block; font-size: 0.7rem; }
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 10px 25px; font-family: 'Cinzel'; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); text-decoration: none; display: inline-block; font-size: 0.7rem; }
         .btn-gold:hover { background: #fff; box-shadow: 0 0 20px var(--gold); }
         .btn-red { background: #ff4444; color: white; border: none; padding: 5px 10px; font-size: 0.5rem; font-weight: bold; cursor: pointer; }
+
+        /* --- WATERMARK --- */
+        .watermark { position: absolute; bottom: 10px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.4); font-family: 'Cinzel'; pointer-events: none; z-index: 5; letter-spacing: 1px; }
 
         /* --- BIO LAYOUT --- */
         .bio-layout { display: grid; grid-template-columns: 350px 1fr; gap: 50px; align-items: center; }
         .frame { border: 1px solid var(--gold); padding: 12px; background: #000; box-shadow: 0 0 30px rgba(212,175,55,0.2); position: relative; }
         .frame img { width: 100%; display: block; filter: contrast(1.1); }
-        .watermark { position: absolute; bottom: 10px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.4); font-family: 'Cinzel'; pointer-events: none; z-index: 5; }
-
+        
         /* --- GRIDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
 
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #111; color: white; border: 1px solid #333; outline: none; }
+        /* --- MODAL --- */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 12000; display: none; justify-content: center; align-items: center; padding: 20px; }
+
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 12px; background: #111; color: white; border: 1px solid #333; outline: none; }
         footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); opacity: 0.4; font-size: 0.7rem; }
     </style>
 </head>
@@ -85,8 +90,8 @@
     <div id="entry-splash" class="splash">
         <div class="glass-card" style="text-align: center; max-width: 450px;">
             <h2 style="font-size: 1.5rem;">Welcome Visionary</h2>
-            <p style="opacity:0.7; font-size: 0.8rem;">Share your expectations for the studio.</p>
-            <div class="stars" onclick="setSplashRating(event)">
+            <p style="opacity:0.7; font-size: 0.8rem;">Initial Studio Impression:</p>
+            <div class="stars" id="e-splash-stars" onclick="setStarRating(event, 'e-splash-stars')">
                 <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
             </div>
             <button class="btn-gold" onclick="closeEntrySplash()">ENTER STUDIO</button>
@@ -97,15 +102,27 @@
     <div id="exit-splash" class="splash">
         <div class="glass-card" style="text-align: center; max-width: 450px;">
             <h2 style="font-size: 1.5rem;">Final Review</h2>
-            <div class="stars" onclick="setSplashRating(event)">
+            <div class="stars" id="x-splash-stars" onclick="setStarRating(event, 'x-splash-stars')">
                 <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
             </div>
-            <textarea id="exit-msg" placeholder="Thoughts before switching to Admin?"></textarea>
+            <textarea id="exit-msg" placeholder="Private notes for the Director..."></textarea>
             <button class="btn-gold" onclick="window.submitExitFeedback()">SUBMIT & SWITCH</button>
         </div>
     </div>
 
-    <!-- NAVIGATION -->
+    <!-- TRANSITION MODAL -->
+    <div id="archive-modal" class="modal">
+        <div class="glass-card" style="width: 100%; max-width: 500px;">
+            <h2 style="font-size:1.5rem;">Archive Production</h2>
+            <p id="trans-title" style="margin-bottom: 20px; font-weight: bold; color: var(--gold);"></p>
+            <input type="text" id="final-cover" placeholder="Cover Image URL">
+            <input type="text" id="final-video" placeholder="Teaser Video URL (YouTube)">
+            <input type="date" id="final-date" style="color-scheme: dark;">
+            <button class="btn-gold" id="btn-final-publish">PUBLISH TO ARCHIVES</button>
+            <button class="btn-gold" style="background:transparent; color:white; border:1px solid #333;" onclick="closeArchiveModal()">CANCEL</button>
+        </div>
+    </div>
+
     <nav>
         <div class="logo" onclick="showPage('home')">DREAMPLAY STUDIO</div>
         <div class="nav-links">
@@ -114,7 +131,7 @@
             <a onclick="showPage('upcoming')">Upcoming</a>
             <a onclick="showPage('archives')">Archives</a>
             <a onclick="showPage('gallery')">Gallery</a>
-            <a onclick="showPage('feedback')">Feedback</a>
+            <a onclick="showPage('feedback')">Feedback Wall</a>
             <a onclick="showPage('contact')">Contact</a>
             <a onclick="showPage('auth')" id="nav-user-label">Sign In</a>
         </div>
@@ -125,20 +142,18 @@
     </nav>
 
     <main>
-        <!-- HOME -->
         <section id="home" class="page active">
             <div style="height: 55vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                <p style="letter-spacing: 12px; color: var(--gold); margin-bottom: 15px;">ESTABLISHED JULY 1, 2026</p>
-                <h1 style="font-family: 'Cinzel'; font-size: 5vw; line-height: 1;">THE FUTURE OF<br>CINEMA</h1>
+                <p style="letter-spacing: 12px; color: var(--gold); margin-bottom: 15px;">ESTABLISHED 2026</p>
+                <h1 style="font-family: 'Cinzel'; font-size: 5vw; line-height: 1;">LEGENDARY<br>STUDIOS</h1>
                 <button class="btn-gold" style="margin-top: 40px;" onclick="showPage('archives')">VIEW ARCHIVES</button>
             </div>
         </section>
 
-        <!-- ABOUT -->
         <section id="about" class="page">
             <h2>The Studio</h2>
             <div class="glass-card">
-                <p style="margin-bottom: 40px;">DreamPlay Studio was established on <b>1 July 2026</b>. We merge high-end filmmaking with interactive media and AI-driven storytelling. DreamPlay Studio is an independent creative production studio founded on 1 July 2026. We create original films, cinematic trailers, animations, games, and digital stories that blend imagination, emotion, and innovation. Our mission is to bring meaningful storytelling to audiences through creativity, technology, and passion.</p>
+                <p style="margin-bottom: 40px;">DreamPlay Studio was established on <b>1 July 2026</b>. We merge high-end filmmaking with interactive media and AI storytelling.</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
                     <div class="glass-card" onclick="showPage('founder')" style="cursor:pointer; text-align: center; border-color: var(--gold);">
                         <img src="https://cdn.phototourl.com/free/2026-07-09-187e4b02-f5c6-4f8f-b2c4-320bd7958e55.jpg" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); margin-bottom:10px;">
@@ -156,7 +171,6 @@
             </div>
         </section>
 
-        <!-- BIOS -->
         <section id="founder" class="page">
             <div class="bio-layout">
                 <div class="frame">
@@ -165,31 +179,40 @@
                 </div>
                 <div>
                     <h2>Harshvardhan</h2>
-                    <p style="color:var(--gold); letter-spacing:4px; margin-bottom: 20px; font-weight: bold;">DIRECTOR | VISIONARY</p>
-                    <p>Harshvardhan of Jaycees Public School is a young filmmaker and game developer passionate about films, animation, AI, and storytelling. His vision at DreamPlay Studio is to bridge the gap between emotion and technology.Harshvardhan is the Founder of DreamPlay Studio, established on 1 July 2026. He is a young filmmaker, storyteller, game developer, and creative creator with a strong passion for building original cinematic experiences. His vision is to create meaningful films, animations, and interactive games that inspire audiences while blending technology with powerful storytelling.
-
-From an early age, Harshvardhan developed a deep interest in filmmaking, animation, artificial intelligence, robotics, and game development. He enjoys transforming imaginative ideas into engaging visual experiences, whether through short films, cinematic trailers, or immersive games. He believes that every story has the power to educate, entertain, and create a lasting emotional impact.
-
-As the founder of DreamPlay Studio, Harshvardhan focuses on writing original stories, designing concepts, directing creative projects, and exploring innovative production techniques. He continuously learns new technologies and creative skills to improve his work and deliver high-quality content.
-
-His long-term goal is to build DreamPlay Studio into a globally recognized production house known for original storytelling, cinematic excellence, and innovation. Through dedication, creativity, and a passion for learning, Harshvardhan hopes to create projects that connect with audiences around the world and leave a lasting impression through films, animation, and interactive entertainment.</p>
+                    <span class="role-title">DIRECTOR | VISIONARY</span>
+                    <p>Harshvardhan is a young filmmaker and game developer passionate about films, animation, AI, and storytelling. His leadership at DreamPlay Studio drives the goal of crafting stories that resonate across generations.</p>
                 </div>
             </div>
         </section>
 
         <section id="cofounder" class="page">
             <h2>Arnav Tyagi</h2>
-            <p style="color:var(--gold); letter-spacing:4px; margin-bottom: 20px; font-weight: bold;">EDITING EXPERT</p>
-            <div class="glass-card">
-                <p>Arnav Tyagi of Jaycees Public School is the Editing Expert and Creative Support of DreamPlay Studio. Known for his surgical precision and rhythmic style, Arnav ensures every project produced carries a cinematic soul.Arnav has a strong interest in video editing, visual effects, motion graphics, and content presentation. He enjoys enhancing films, trailers, and promotional content by combining creativity with technical precision. His work focuses on creating smooth transitions, impactful pacing, cinematic color grading, and visually appealing edits that strengthen the emotional impact of every story.
+            <span class="role-title">EDITING EXPERT</span>
+            <div class="glass-card"><p>Arnav Tyagi is the Editing Expert and Creative Support of DreamPlay Studio. Known for his surgical precision and rhythmic style, Arnav ensures every project produced carries a cinematic soul.</p></div>
+        </section>
 
-As Co-Founder, Arnav collaborates closely with the creative team during production and post-production, helping maintain high-quality standards across all DreamPlay Studio projects. He believes that effective editing is one of the most important elements of storytelling, bringing scenes together in a way that captivates audiences.
+        <!-- VIEWS -->
+        <section id="upcoming" class="page"><h2>In Production</h2><div id="u-up-list" class="grid"></div></section>
+        <section id="archives" class="page"><h2>Archives</h2><div id="u-arc-list" class="grid"></div></section>
+        <section id="gallery" class="page"><h2>Concept Art</h2><div id="u-art-list" class="art-grid"></div></section>
 
-With a passion for continuous learning and innovation, Arnav aims to contribute to DreamPlay Studio's vision of producing original films, animations, games, and digital content that inspire, entertain, and leave a lasting impression on audiences worldwide.</p>
+        <section id="feedback" class="page">
+            <h2>Feedback Wall</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:40px;">
+                <div class="glass-card">
+                    <div class="stars" id="wall-stars" onclick="setStarRating(event, 'wall-stars')">
+                        <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+                    </div>
+                    <input type="text" id="fb-n" placeholder="Name">
+                    <textarea id="fb-m" placeholder="Write a testimonial..."></textarea>
+                    <button class="btn-gold" style="width:100%" onclick="window.submitManualFB()">PUBLISH TESTIMONIAL</button>
+                </div>
+                <div id="fb-list-main" style="max-height: 600px; overflow-y:auto">
+                    <p style="opacity:0.3; text-align:center">Fetching official testimonials...</p>
+                </div>
             </div>
         </section>
 
-        <!-- CONTACT -->
         <section id="contact" class="page">
             <h2>Contact</h2>
             <div class="glass-card">
@@ -197,27 +220,21 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
                 <p>dreamplaystudio26@gmail.com</p>
                 <p style="margin-bottom:30px;">dreamplaysoffficial01@gmail.com</p>
                 <div style="display:flex; gap:20px;">
-                    <a href="https://youtube.com/@dreamplaystudio-26" target="_blank" style="color:var(--gold); font-size:1.5rem;"><i class="fab fa-youtube"></i></a>
+                    <a href="https://youtube.com/@dreamplaystudio-26" target="_blank" style="color:var(--gold); font-size:1.5rem; margin-right:20px;"><i class="fab fa-youtube"></i></a>
                     <a href="https://www.linkedin.com/in/dreamplay-studio-948126421" target="_blank" style="color:var(--gold); font-size:1.5rem;"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
         </section>
 
-        <!-- DYNAMIC VIEWS -->
-        <section id="upcoming" class="page"><h2>Pre-Production</h2><div id="u-up-list" class="grid"></div></section>
-        <section id="archives" class="page"><h2>Archives</h2><div id="u-arc-list" class="grid"></div></section>
-        <section id="gallery" class="page"><h2>Concept Art</h2><div id="u-art-list" class="art-grid"></div></section>
-
-        <!-- ADMIN -->
         <section id="admin" class="page">
-            <h2 style="color:var(--gold);">Director's Desk</h2>
+            <h2 style="color:var(--gold)">Director's Desk</h2>
             <div class="glass-card">
-                <h3>1. Initialize Production</h3>
+                <h3>1. New Project</h3>
                 <input type="text" id="adm-up-t" placeholder="Working Title">
-                <button class="btn-gold" onclick="window.addUpcoming()">START</button>
+                <button class="btn-gold" onclick="window.addUpcoming()">INITIALIZE</button>
             </div>
             <div class="glass-card">
-                <h3>2. Transition Management</h3>
+                <h3>2. Transition Workspace</h3>
                 <div id="adm-workspace"></div>
             </div>
             <div class="glass-card">
@@ -227,27 +244,13 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
             </div>
         </section>
 
-        <!-- FEEDBACK -->
-        <section id="feedback" class="page">
-            <h2>Community Voice</h2>
-            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:40px;">
-                <div class="glass-card">
-                    <input type="text" id="fb-n" placeholder="Name">
-                    <textarea id="fb-m" placeholder="Message"></textarea>
-                    <button class="btn-gold" style="width:100%" onclick="window.submitManualFB()">PUBLISH</button>
-                </div>
-                <div id="fb-list-main" style="max-height: 500px; overflow-y:auto"></div>
-            </div>
-        </section>
-
-        <!-- AUTH -->
         <section id="auth" class="page">
             <div class="glass-card" style="max-width:400px; margin:auto;">
                 <h3 id="auth-title" style="text-align:center; font-family:'Cinzel';">Login</h3>
                 <input type="email" id="email" placeholder="Email">
                 <input type="password" id="pass" placeholder="Password">
                 <button class="btn-gold" style="width:100%" onclick="window.authAction()">ENTER</button>
-                <p onclick="window.toggleAuth()" style="text-align:center; margin-top:20px; cursor:pointer; color:var(--gold); font-size:0.7rem;">NEW? REGISTER</p>
+                <p onclick="window.toggleAuth()" id="auth-toggle-link" style="text-align:center; margin-top:20px; color:var(--gold); cursor:pointer; font-size:0.7rem;">REGISTER</p>
             </div>
         </section>
     </main>
@@ -255,27 +258,25 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
     <footer>&copy; 2026 DREAMPLAY STUDIO</footer>
 
     <script>
-        // NAVIGATION & VISUALS
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) target.classList.add('active');
+            const t = document.getElementById(id); if(t) t.classList.add('active');
             window.scrollTo(0,0);
         }
-        function setMode(mode) {
-            document.getElementById('u-t').classList.toggle('active', mode === 'user');
-            document.getElementById('a-t').classList.toggle('active', mode === 'admin');
-            showPage(mode === 'admin' ? 'admin' : 'home');
+        function setMode(m) {
+            document.getElementById('u-t').classList.toggle('active', m === 'user');
+            document.getElementById('a-t').classList.toggle('active', m === 'admin');
+            showPage(m === 'admin' ? 'admin' : 'home');
         }
         function triggerExitSplash() { document.getElementById('exit-splash').style.display = 'flex'; }
         function closeEntrySplash() { document.getElementById('entry-splash').style.display = 'none'; }
         
-        let globalRating = 0;
-        function setSplashRating(e) {
+        let lastSelectedRating = 0;
+        function setStarRating(e, containerId) {
             if(e.target.tagName !== 'I') return;
             const val = e.target.dataset.v;
-            globalRating = val;
-            const stars = e.target.parentElement.querySelectorAll('i');
+            lastSelectedRating = val;
+            const stars = document.getElementById(containerId).querySelectorAll('i');
             stars.forEach((s, i) => s.classList.toggle('active', i < val));
         }
 
@@ -295,7 +296,7 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAME4ouAQXK1AqxHEP1BYpdXC_FywlS6ZE",
@@ -310,37 +311,76 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // TRANSITION LOGIC
-        window.finalizeProject = async (id, title) => {
-            const cover = prompt("Cover Link:");
-            const date = prompt("Release Date (YYYY-MM-DD):");
-            if(!cover || !date) return;
-            await addDoc(collection(db, "archives"), { title, cover, date, time: Date.now() });
-            await deleteDoc(doc(db, "upcoming", id));
+        // TRANSITION
+        let pendingId = ""; let pendingTitle = "";
+        window.openArchiveFlow = (id, title) => {
+            pendingId = id; pendingTitle = title;
+            document.getElementById('trans-title').innerText = title;
+            document.getElementById('archive-modal').style.display = 'flex';
+        };
+        window.closeArchiveModal = () => document.getElementById('archive-modal').style.display = 'none';
+
+        document.getElementById('btn-final-publish').onclick = async () => {
+            const c = document.getElementById('final-cover').value;
+            const v = document.getElementById('final-video').value;
+            const d = document.getElementById('final-date').value;
+            if(!c || !d) return alert("Cover and Date required");
+            await addDoc(collection(db, "archives"), { title: pendingTitle, cover: c, video: v, date: d, time: Date.now() });
+            await deleteDoc(doc(db, "upcoming", pendingId));
+            closeArchiveModal();
             alert("Published!");
         };
+
         window.deleteProject = async (id) => { if(confirm("Scrap project?")) await deleteDoc(doc(db, "upcoming", id)); };
 
-        // FEEDBACK
+        // FEEDBACK FILTERING LOGIC
         window.submitExitFeedback = async () => {
             const m = document.getElementById('exit-msg').value;
-            await addDoc(collection(db, "feedbacks"), { name: "Exit Survey", rating: 5, msg: m, time: Date.now() });
+            // Tagging as 'private' so it doesn't show in Feedback Wall
+            await addDoc(collection(db, "feedbacks"), { 
+                name: "Exit Survey", 
+                rating: lastSelectedRating, 
+                msg: m || "No comment", 
+                type: "private", 
+                time: Date.now() 
+            });
             document.getElementById('exit-splash').style.display = 'none';
             setMode('admin');
         };
+
         window.submitManualFB = async () => {
-            const n = document.getElementById('fb-n').value; const m = document.getElementById('fb-m').value;
-            await addDoc(collection(db, "feedbacks"), { name: n, rating: 5, msg: m, time: Date.now() });
-            alert("Feedback posted!");
+            const n = document.getElementById('fb-n').value; 
+            const m = document.getElementById('fb-m').value;
+            if(!n || lastSelectedRating == 0) return alert("Please provide Name and Rating");
+            // Tagging as 'public' to show in the wall
+            await addDoc(collection(db, "feedbacks"), { 
+                name: n, 
+                rating: lastSelectedRating, 
+                msg: m, 
+                type: "public", 
+                time: Date.now() 
+            });
+            alert("Testimonial Published!");
         };
 
-        // LISTENERS
+        // TESTIMONIAL WALL (ONLY SHOWS 'public' TYPE)
+        onSnapshot(query(collection(db, "feedbacks"), where("type", "==", "public"), orderBy("time", "desc")), snap => {
+            const l = document.getElementById('fb-list-main'); l.innerHTML = "";
+            if(snap.empty) l.innerHTML = "<p style='opacity:0.3; text-align:center'>Be the first to leave a testimonial.</p>";
+            snap.forEach(d => {
+                const f = d.data();
+                let stars = ""; for(let i=0; i<5; i++) stars += `<i class="fas fa-star" style="color:${i < f.rating ? '#D4AF37' : '#222'}"></i> `;
+                l.innerHTML += `<div class="glass-card" style="padding:15px; margin-bottom:10px;"><h4>${f.name}</h4><div>${stars}</div><p>${f.msg}</p></div>`;
+            });
+        });
+
+        // OTHER LISTENERS
         onSnapshot(query(collection(db, "archives"), orderBy("time", "desc")), snap => {
             const l = document.getElementById('u-arc-list'); l.innerHTML = "";
             const today = new Date().toISOString().split('T')[0];
             snap.forEach(d => {
                 const p = d.data(); const isRel = p.date <= today;
-                l.innerHTML += `<div class="glass-card" style="padding:0; overflow:hidden"><div style="position:relative"><img src="${p.cover}" style="width:100%; height:200px; object-fit:cover"><div class="watermark">© DREAMPLAY STUDIO</div></div><div style="padding:20px"><span style="border:1px solid var(--gold); color:var(--gold); font-size:0.5rem; padding:2px 8px;">${isRel ? 'RELEASED' : 'UPCOMING'}</span><h3>${p.title}</h3><p style="font-size:0.6rem; opacity:0.6;">${p.date}</p></div></div>`;
+                l.innerHTML += `<div class="glass-card" style="padding:0; overflow:hidden"><div style="position:relative"><img src="${p.cover}" style="width:100%; height:180px; object-fit:cover"><div class="watermark">© DREAMPLAY STUDIO</div></div><div style="padding:20px"><span style="border:1px solid var(--gold); color:var(--gold); font-size:0.5rem; padding:2px 5px;">${isRel ? 'RELEASED' : 'UPCOMING'}</span><h3>${p.title}</h3><p style="font-size:0.6rem;">${p.date}</p></div></div>`;
             });
         });
 
@@ -349,8 +389,8 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
             ul.innerHTML = ""; al.innerHTML = "";
             snap.forEach(d => {
                 const p = d.data();
-                ul.innerHTML += `<div class="glass-card"><h3>${p.title}</h3><p style="color:var(--gold); font-size:0.5rem">IN PRODUCTION</p></div>`;
-                al.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222"><span>${p.title}</span><div><button onclick="window.finalizeProject('${d.id}', '${p.title}')">ARCHIVE</button> <button class="btn-red" onclick="window.deleteProject('${d.id}')">SCRAP</button></div></div>`;
+                ul.innerHTML += `<div class="glass-card"><h3>${p.title}</h3><p style="font-size:0.5rem; color:var(--gold)">IN PRODUCTION</p></div>`;
+                al.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;"><span>${p.title}</span><div><button onclick="window.openArchiveFlow('${d.id}', '${p.title}')">ARCHIVE</button> <button style="color:red; margin-left:10px" onclick="window.deleteProject('${d.id}')">SCRAP</button></div></div>`;
             });
         });
 
@@ -359,13 +399,8 @@ With a passion for continuous learning and innovation, Arnav aims to contribute 
             snap.forEach(d => { l.innerHTML += `<div style="position:relative"><img src="${d.data().url}" class="art-item"><div class="watermark">© DREAMPLAY STUDIO</div></div>`; });
         });
 
-        onSnapshot(query(collection(db, "feedbacks"), orderBy("time", "desc")), snap => {
-            const l = document.getElementById('fb-list-main'); l.innerHTML = "";
-            snap.forEach(d => { l.innerHTML += `<div class="glass-card" style="padding:15px; margin-bottom:10px;"><h4>${d.data().name}</h4><p>${d.data().msg}</p></div>`; });
-        });
-
-        window.addUpcoming = async () => { await addDoc(collection(db, "upcoming"), { title: document.getElementById('adm-up-t').value, time: Date.now() }); };
-        window.addArt = async () => { await addDoc(collection(db, "art"), { url: document.getElementById('adm-art-u').value, time: Date.now() }); };
+        window.addUpcoming = async () => { await addDoc(collection(db, "upcoming"), { title: document.getElementById('adm-up-t').value, time: Date.now() }); document.getElementById('adm-up-t').value=""; };
+        window.addArt = async () => { await addDoc(collection(db, "art"), { url: document.getElementById('adm-art-u').value, time: Date.now() }); document.getElementById('adm-art-u').value=""; };
         
         let isReg = false;
         window.toggleAuth = () => { isReg = !isReg; document.getElementById('auth-title').innerText = isReg ? "Register" : "Login"; };
