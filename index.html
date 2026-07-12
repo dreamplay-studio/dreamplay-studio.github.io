@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamPlay Studio | Official</title>
     
-   <!-- Google Site Verification -->
+    <!-- Google Site Verification -->
     <meta name="google-site-verification" content="N60wMHqt5IrebMSJQSrkHKdCYNUg57GHwDHss6RieHw" />
 
     <!-- Favicon -->
@@ -27,18 +27,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--black); color: white; overflow-x: hidden; line-height: 1.6; }
 
-        /* --- VISUAL FX --- */
-        .film-grain { position: fixed; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain.jpg'); opacity: 0.03; pointer-events: none; z-index: 9998; }
+        /* --- BACKGROUND FX --- */
         .spotlight { position: fixed; inset: 0; background: radial-gradient(circle at var(--x) var(--y), rgba(212, 175, 55, 0.08) 0%, transparent 50%); z-index: -1; pointer-events: none; }
+        .film-grain { position: fixed; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Grain.jpg'); opacity: 0.03; pointer-events: none; z-index: 9998; }
 
-        /* --- LOADER & SPLASH --- */
+        /* --- LOADER --- */
         #loader { position: fixed; inset: 0; background: black; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s ease; }
         .loader-logo { font-family: 'Cinzel'; font-size: 3rem; color: var(--gold); letter-spacing: 15px; animation: pulse 2s infinite alternate; text-align: center; }
         @keyframes pulse { from { opacity: 0.2; } to { opacity: 1; } }
-
-        .splash { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(25px); }
-        .stars { display: flex; gap: 10px; justify-content: center; margin: 15px 0; font-size: 1.5rem; color: #222; cursor: pointer; }
-        .stars .active { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
 
         /* --- NAVIGATION --- */
         nav { position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
@@ -57,25 +53,22 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .glass-card { background: var(--glass); border: 1px solid var(--border); padding: 2.5rem; backdrop-filter: blur(20px); border-radius: 4px; margin-bottom: 20px; position: relative; }
-        .btn-gold { background: var(--gold); color: black; border: none; padding: 10px 25px; font-family: 'Cinzel'; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); text-decoration: none; display: inline-block; font-size: 0.7rem; }
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px 30px; font-family: 'Cinzel'; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); text-decoration: none; display: inline-block; font-size: 0.7rem; }
         .btn-gold:hover { background: #fff; box-shadow: 0 0 20px var(--gold); }
-        .btn-red { background: #ff4444; color: white; border: none; padding: 5px 10px; font-size: 0.5rem; font-weight: bold; cursor: pointer; }
-
-        /* --- WATERMARK --- */
-        .watermark { position: absolute; bottom: 10px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.4); font-family: 'Cinzel'; pointer-events: none; z-index: 5; letter-spacing: 1px; }
 
         /* --- BIO LAYOUT --- */
         .bio-layout { display: grid; grid-template-columns: 350px 1fr; gap: 50px; align-items: center; }
         .frame { border: 1px solid var(--gold); padding: 12px; background: #000; box-shadow: 0 0 30px rgba(212,175,55,0.2); position: relative; }
         .frame img { width: 100%; display: block; filter: contrast(1.1); }
-        
+        .watermark { position: absolute; bottom: 10px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.4); font-family: 'Cinzel'; pointer-events: none; z-index: 5; }
+
+        /* --- FEEDBACK STARS --- */
+        .star-rating { display: flex; gap: 10px; font-size: 1.8rem; color: #222; margin-bottom: 20px; cursor: pointer; }
+        .star-rating .active { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        .fb-card { background: rgba(255,255,255,0.02); padding: 20px; border-left: 3px solid var(--gold); margin-bottom: 15px; }
+
         /* --- GRIDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
-
-        /* --- MODAL --- */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 12000; display: none; justify-content: center; align-items: center; padding: 20px; }
-
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 12px; background: #111; color: white; border: 1px solid #333; outline: none; }
         footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); opacity: 0.4; font-size: 0.7rem; }
     </style>
@@ -86,26 +79,225 @@
     <div class="spotlight" id="spotlight"></div>
     <div id="loader"><div class="loader-logo">DREAMPLAY</div></div>
 
-    <!-- ENTRY SPLASH -->
-    <div id="entry-splash" class="splash">
-        <div class="glass-card" style="text-align: center; max-width: 450px;">
-            <h2 style="font-size: 1.5rem;">Welcome Visionary</h2>
-            <p style="opacity:0.7; font-size: 0.8rem;">Initial Studio Impression:</p>
-            <div class="stars" id="e-splash-stars" onclick="setStarRating(event, 'e-splash-stars')">
-                <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
-            </div>
-            <button class="btn-gold" onclick="closeEntrySplash()">ENTER STUDIO</button>
+    <nav>
+        <div class="logo" onclick="showPage('home')">DREAMPLAY STUDIO</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('about')">About</a>
+            <a onclick="showPage('upcoming')">Upcoming</a>
+            <a onclick="showPage('archives')">Archives</a>
+            <a onclick="showPage('gallery')">Gallery</a>
+            <a onclick="showPage('feedback')">Feedback Wall</a>
+            <a onclick="showPage('contact')">Contact</a>
+            <a onclick="showPage('auth')" id="nav-user">Sign In</a>
         </div>
-    </div>
+        <div class="panel-toggle">
+            <div id="u-t" class="t-btn active" onclick="setMode('user')">USER</div>
+            <div id="a-t" class="t-btn" onclick="setMode('admin')">ADMIN</div>
+        </div>
+    </nav>
 
-    <!-- EXIT SPLASH -->
-    <div id="exit-splash" class="splash">
-        <div class="glass-card" style="text-align: center; max-width: 450px;">
-            <h2 style="font-size: 1.5rem;">Final Review</h2>
-            <div class="stars" id="x-splash-stars" onclick="setStarRating(event, 'x-splash-stars')">
-                <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+    <main>
+        <!-- HOME -->
+        <section id="home" class="page active">
+            <div style="height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <p style="letter-spacing: 12px; color: var(--gold); margin-bottom: 15px;">ESTABLISHED 2026</p>
+                <h1 style="font-family: 'Cinzel'; font-size: 5vw; line-height: 1;">LEGENDARY<br>PRODUCTIONS</h1>
+                <button class="btn-gold" style="margin-top: 40px;" onclick="showPage('archives')">THE ARCHIVES</button>
             </div>
-            <textarea id="exit-msg" placeholder="Private notes for the Director..."></textarea>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="page">
+            <h2>The Studio</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 40px;">DreamPlay Studio was established on <b>1 July 2026</b>. We merge high-end filmmaking with interactive media and AI storytelling.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="glass-card" onclick="showPage('founder')" style="cursor:pointer; text-align: center; border-color: var(--gold);">
+                        <img src="https://cdn.phototourl.com/free/2026-07-09-187e4b02-f5c6-4f8f-b2c4-320bd7958e55.jpg" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); margin-bottom:10px;">
+                        <h3>Harshvardhan</h3>
+                        <p style="font-size:0.6rem; color:var(--gold);">FOUNDER</p>
+                    </div>
+                    <div class="glass-card" onclick="showPage('cofounder')" style="cursor:pointer; text-align: center; border-color: var(--gold);">
+                        <div style="width:90px; height:90px; border-radius:50%; background:#111; margin:auto; display:flex; align-items:center; justify-content:center; border:2px solid var(--gold); margin-bottom:10px;">
+                            <i class="fas fa-magic" style="color:var(--gold); font-size:1.5rem;"></i>
+                        </div>
+                        <h3>Arnav Tyagi</h3>
+                        <p style="font-size:0.6rem; color:var(--gold);">CO-FOUNDER</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BIOS -->
+        <section id="founder" class="page">
+            <div class="bio-layout">
+                <div class="frame">
+                    <img src="https://cdn.phototourl.com/free/2026-07-09-187e4b02-f5c6-4f8f-b2c4-320bd7958e55.jpg">
+                    <div class="watermark">© DREAMPLAY STUDIO</div>
+                </div>
+                <div>
+                    <h2>Harshvardhan</h2>
+                    <span style="color:var(--gold); letter-spacing:3px; display:block; margin-bottom:20px;">FOUNDER | DIRECTOR | VISIONARY</span>
+                    <p>Harshvardhan is a young filmmaker and game developer passionate about films, animation, AI, and storytelling. His leadership at DreamPlay Studio drives the goal of crafting stories that resonate across generations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cofounder" class="page">
+            <h2>Arnav Tyagi</h2>
+            <span style="color:var(--gold); letter-spacing:3px; display:block; margin-bottom:20px;">CO-FOUNDER | EDITING EXPERT</span>
+            <div class="glass-card"><p>Arnav Tyagi is the Editing Expert and Creative Support of DreamPlay Studio. Known for his surgical precision and rhythmic style, Arnav ensures every project produced carries a cinematic soul.</p></div>
+        </section>
+
+        <!-- VIEWS -->
+        <section id="upcoming" class="page"><h2>In Production</h2><div id="u-up-list" class="grid"></div></section>
+        <section id="archives" class="page"><h2>Archives</h2><div id="u-arc-list" class="grid"></div></section>
+        <section id="gallery" class="page"><h2>Gallery</h2><div id="u-art-list" class="grid"></div></section>
+
+        <!-- FEEDBACK (NEW FIXED SYSTEM) -->
+        <section id="feedback" class="page">
+            <h2>Feedback Wall</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:40px;">
+                <div class="glass-card">
+                    <h3>Review Us</h3>
+                    <div class="star-rating" id="rating-stars" onclick="handleFormStars(event)">
+                        <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+                    </div>
+                    <input type="text" id="fb-name" placeholder="Name">
+                    <textarea id="fb-msg" placeholder="Share your experience..." rows="5"></textarea>
+                    <button class="btn-gold" style="width:100%" onclick="window.postFeedback()">PUBLISH FEEDBACK</button>
+                </div>
+                <div id="public-feedback-wall" style="max-height: 600px; overflow-y:auto">
+                    <p style="opacity:0.3; text-align:center">Loading testimonials...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="page">
+            <h2>Contact</h2>
+            <div class="glass-card">
+                <p style="color:var(--gold); font-size:1.2rem; margin-bottom:20px;"><i class="fas fa-clock"></i> 9 AM TO 6 PM</p>
+                <p>dreamplaystudio26@gmail.com</p>
+                <p style="margin-bottom:30px;">dreamplaysoffficial01@gmail.com</p>
+                <div style="display:flex; gap:20px;">
+                    <a href="https://youtube.com/@dreamplaystudio-26" target="_blank" style="color:var(--gold); font-size:1.5rem;"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.linkedin.com/in/dreamplay-studio-948126421" target="_blank" style="color:var(--gold); font-size:1.5rem;"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section id="admin" class="page">
+            <h2 style="color:var(--gold)">Admin</h2>
+            <div class="glass-card">
+                <h3>Add Upcoming Production</h3>
+                <input type="text" id="adm-up-t" placeholder="Title">
+                <button class="btn-gold" onclick="window.addUpcoming()">INITIALIZE</button>
+            </div>
+        </section>
+
+        <section id="auth" class="page">
+            <div class="glass-card" style="max-width:400px; margin:auto;">
+                <h3 style="text-align:center; font-family:'Cinzel';">Studio Login</h3>
+                <input type="email" id="email" placeholder="Email">
+                <input type="password" id="pass" placeholder="Password">
+                <button class="btn-gold" style="width:100%" onclick="window.loginAction()">ENTER</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>&copy; 2026 DREAMPLAY STUDIO</footer>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+        function setMode(m) {
+            document.getElementById('u-t').classList.toggle('active', m === 'user');
+            document.getElementById('a-t').classList.toggle('active', m === 'admin');
+            showPage(m === 'admin' ? 'admin' : 'home');
+        }
+        
+        let formRating = 0;
+        function handleFormStars(e) {
+            if(e.target.tagName !== 'I') return;
+            formRating = e.target.dataset.v;
+            const stars = document.getElementById('rating-stars').querySelectorAll('i');
+            stars.forEach((s, i) => s.classList.toggle('active', i < formRating));
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const spot = document.getElementById('spotlight');
+            spot.style.setProperty('--x', e.clientX + 'px');
+            spot.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        window.onload = () => { document.getElementById('loader').style.display='none'; };
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAME4ouAQXK1AqxHEP1BYpdXC_FywlS6ZE",
+            authDomain: "dreamplaystudio-e1068.firebaseapp.com",
+            projectId: "dreamplaystudio-e1068",
+            storageBucket: "dreamplaystudio-e1068.firebasestorage.app",
+            messagingSenderId: "1047059448725",
+            appId: "1:1047059448725:web:987e1f3d06e079c625ac9c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // FEEDBACK LOGIC
+        window.postFeedback = async () => {
+            const n = document.getElementById('fb-name').value;
+            const m = document.getElementById('fb-msg').value;
+            if(!n || formRating === 0) return alert("Please enter Name and Rating");
+            
+            await addDoc(collection(db, "public_feedback"), {
+                name: n,
+                msg: m,
+                rating: parseInt(formRating),
+                time: Date.now()
+            });
+            alert("Feedback posted!");
+            document.getElementById('fb-name').value = "";
+            document.getElementById('fb-msg').value = "";
+        };
+
+        onSnapshot(query(collection(db, "public_feedback"), orderBy("time", "desc")), snap => {
+            const wall = document.getElementById('public-feedback-wall');
+            wall.innerHTML = "";
+            snap.forEach(doc => {
+                const f = doc.data();
+                let stars = "";
+                for(let i=0; i<5; i++) stars += `<i class="fas fa-star" style="color:${i < f.rating ? '#D4AF37' : '#222'}"></i> `;
+                wall.innerHTML += `<div class="fb-card"><h4>${f.name}</h4><div>${stars}</div><p>${f.msg}</p></div>`;
+            });
+        });
+
+        // ADMIN LOGIC
+        window.addUpcoming = async () => {
+            await addDoc(collection(db, "upcoming"), { title: document.getElementById('adm-up-t').value, time: Date.now() });
+            alert("Success!");
+        };
+
+        window.loginAction = () => {
+            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value)
+            .then(() => showPage('home')).catch(e => alert(e.message));
+        };
+    </script>
+</body>
+</html>
             <button class="btn-gold" onclick="window.submitExitFeedback()">SUBMIT & SWITCH</button>
         </div>
     </div>
